@@ -1,11 +1,10 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import Offcanvas from 'react-bootstrap/Offcanvas';
 import { OffCanva } from '../../Component/OffCanva/OffCanva';
 import { FormInput, FormSelect } from '../../Component/Inputs/Inputs';
 import { DeleteIcon, LessThenIcon } from '../../Assets/Svg';
 
-const availableOptions = ["first_name", "last_name", "gender", "age", "account_name", "city", "state"];
+const availableOptions = ["First Name", "Last Name", "Gender", "Age", "Account Name", "City", "State"];
 
 export default function Home() {
     let initialValue = {
@@ -14,7 +13,7 @@ export default function Home() {
     }
     const [show, setShow] = useState(false);
     const [formData, setFormData] = useState(initialValue);
-    const api = "https://api.nationalize.io/";
+    const api = "https://webhook.site/d6c6b4e5-9f0b-4b0f-a9b3-0d8b5c3a5a7c";
 
     // save segment
     const handleInputChange = (event) => {
@@ -52,20 +51,13 @@ export default function Home() {
         }));
     };
 
-    // submit form data
-    const handleSubmits = (event) => {
-        event.preventDefault();
-        console.log('Form Data:', formData);
-        setShow(false);
-        setFormData(initialValue);
-    };
 
     // submit form data
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const formattedSchema = formData.schema.map(item => {
-            const key = item.value;
-            const value = item.value.replaceAll('_', ' ').replace(/\b\w/g, c => c.toUpperCase());
+            const key = item.value.replaceAll(' ', '_').toLowerCase()
+            const value = item.value;
             return { [key]: value };
         });
 
@@ -75,8 +67,18 @@ export default function Home() {
         };
 
         console.log('Form Data:', data);
-        // setShow(false);
-        // setFormData(initialValue);
+
+        // api call
+        await axios.post(api, data).then((res) => {
+            console.log(res);
+            setShow(false);
+            setFormData(initialValue);
+        }).catch((error) => {
+            console.log(error);
+            setShow(false);
+            setFormData(initialValue);
+        })
+
     };
 
 
