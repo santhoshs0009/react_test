@@ -9,7 +9,7 @@ const availableOptions = ["First Name", "Last Name", "Gender", "Age", "Account N
 export default function Home() {
     let initialValue = {
         segment_name: '',
-        schema: [{ id: Math.floor(Math.random() * 9), value: '' }]
+        schema: [{ value: '' }]
     }
     const [show, setShow] = useState(false);
     const [formData, setFormData] = useState(initialValue);
@@ -114,7 +114,7 @@ export default function Home() {
                             </div>
 
                             {formData.schema.map((schema, i) => (
-                                <div key={schema.id} className="d-flex align-items-center mb-3">
+                                <div key={i} className="d-flex align-items-center mb-3">
                                     <span className={`round_circle ${schema.value ? 'green' : 'red'}`} ></span>
                                     <FormSelect
                                         value={schema.value}
