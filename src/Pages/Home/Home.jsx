@@ -70,13 +70,11 @@ export default function Home() {
 
         // api call
         await axios.post(api, data).then((res) => {
-            console.log(res);
+            console.log("res",res);
             setShow(false);
             setFormData(initialValue);
         }).catch((error) => {
             console.log(error);
-            setShow(false);
-            setFormData(initialValue);
         })
 
     };
@@ -84,65 +82,64 @@ export default function Home() {
 
     return (
         <>
-            <button onClick={() => setShow(true)}>Save segment</button>
+            <button onClick={() => setShow(true)} className='btn canva_open'>Save segment</button>
 
             <OffCanva show={show} handleClose={() => setShow(false)} placement="end">
-                <div className='header'>
-                    <span onClick={() => setShow(false)} >
-                        <LessThenIcon />
-                    </span>
-                    <h2>Saving Segment</h2>
-                </div>
+                <div className='offcanvas_data'>
+                    <div className='header'>
+                        <span onClick={() => setShow(false)} >
+                            <LessThenIcon />
+                        </span>
+                        <h2>Saving Segment</h2>
+                    </div>
 
-                <form onSubmit={handleSubmit}>
-                    <div className='body'>
-                        <FormInput
-                            htmlFor="segment_name"
-                            label="Enter the Name of the Segment"
-                            type="text"
-                            name="segment_name"
-                            id="segment_name"
-                            placeholder='Name of the Segment'
-                            value={formData.segment_name}
-                            onChange={handleInputChange}
-                            required={true}
-                        />
+                    <form onSubmit={handleSubmit}>
+                        <div className='body'>
+                            <FormInput
+                                htmlFor="segment_name"
+                                label="Enter the Name of the Segment"
+                                type="text"
+                                name="segment_name"
+                                id="segment_name"
+                                placeholder='Name of the Segment'
+                                value={formData.segment_name}
+                                onChange={handleInputChange}
+                                required={true}
+                            />
 
-                        <p className='my-3'>To save your segment, you need to add the schema to build the query</p>
-                        <div className='d-flex align-items-center justify-content-end mb-3'>
-                            <span className='me-3 d-flex align-items-center'> <span className='round_circle green'></span> - User Traits</span>
-                            <span className='d-flex align-items-center'><span className='round_circle red'></span> - Group Traits</span>
+                            <p className='my-3'>To save your segment, you need to add the schema to build the query</p>
+                            <div className='d-flex align-items-center justify-content-end mb-3'>
+                                <span className='me-3 d-flex align-items-center'> <span className='round_circle green'></span> - User Traits</span>
+                                <span className='d-flex align-items-center'><span className='round_circle red'></span> - Group Traits</span>
+                            </div>
+
+                            {formData.schema.map((schema, i) => (
+                                <div key={schema.id} className="d-flex align-items-center mb-3">
+                                    <span className={`round_circle ${schema.value ? 'green' : 'red'}`} ></span>
+                                    <FormSelect
+                                        value={schema.value}
+                                        onChange={e => handleSchemaChange(schema?.id, e)}
+                                        required={true}
+                                        defaultOption="Add schema to segment"
+                                        dataOptions={availableOptions}
+                                        schemas={formData?.schema}
+                                    />
+                                    <span onClick={() => handleRemoveSchema(schema.id)}>
+                                        <DeleteIcon />
+                                    </span>
+                                </div>
+                            ))}
+                            <span className='add' onClick={handleAddSchema}> + Add new schema</span>
                         </div>
 
-                        {formData.schema.map((schema, i) => (
-                            <div key={schema.id} className="d-flex align-items-center mb-3">
-                                <span className={`round_circle ${schema.value ? 'green' : 'red'}`} ></span>
-                                <FormSelect
-                                    value={schema.value}
-                                    onChange={e => handleSchemaChange(schema?.id, e)}
-                                    required={true}
-                                    defaultOption="Add schema to segment"
-                                    dataOptions={availableOptions}
-                                    schemas={formData?.schema}
-                                />
-                                <span onClick={() => handleRemoveSchema(schema.id)}>
-                                    <DeleteIcon />
-                                </span>
-                            </div>
-                        ))}
-                        <span className='add' onClick={handleAddSchema}> + Add new schema</span>
-                    </div>
-
-                    <div className='footer'>
-                        <button className='btn btn-success' type='submit'>Save the Segment</button>
-                        <button className='btn ms-2' onClick={() => setShow(false)}>Cancel</button>
-                    </div>
-                </form>
+                        <div className='footer'>
+                            <button className='btn btn-success' type='submit'>Save the Segment</button>
+                            <button className='btn ms-2 cancel' onClick={() => setShow(false)}>Cancel</button>
+                        </div>
+                    </form>
+                </div>
             </OffCanva>
 
-
-            {/* Displaying formData object */}
-            <pre>{JSON.stringify(formData, null, 2)}</pre>
         </>
     );
 }

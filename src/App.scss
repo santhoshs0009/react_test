@@ -1,3 +1,9 @@
+.canva_open:hover,
+.canva_open{
+  border: 1px solid;
+  margin: 30px;
+}
+
 .header {
   display: flex;
   align-items: center;
@@ -7,7 +13,6 @@
   padding: 10px;
 }
 
-.footer,
 .body {
   padding: 15px;
 }
@@ -32,6 +37,20 @@
   color: #198754;
 }
 
-.hide{
+.hide {
   display: none;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  background: #d9d3d3;
+  padding: 15px;
+  width: 100%;
+}
+
+.cancel {
+  border: 1px solid #fff;
+  color: red;
+  background-color: #fff;
 }
