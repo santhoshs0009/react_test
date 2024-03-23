@@ -9,7 +9,7 @@ const availableOptions = ["First Name", "Last Name", "Gender", "Age", "Account N
 export default function Home() {
     let initialValue = {
         segment_name: '',
-        schema: [{ value: '' }]
+        schema: [{ id: Date.now(), value: '' }]
     }
     const [show, setShow] = useState(false);
     const [formData, setFormData] = useState(initialValue);
@@ -70,7 +70,6 @@ export default function Home() {
 
         // api call
         await axios.post(api, data).then((res) => {
-            console.log("res",res);
             setShow(false);
             setFormData(initialValue);
         }).catch((error) => {
